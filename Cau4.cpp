@@ -26,6 +26,7 @@ int main() {
     double x;
     printf("Nhap so can tinh: ");
     cin >> x;
+    printf("sin(%.5lf) = ", x);
     // Chuyen x ve khoang [0, 2*PI]
     x = fmod(x, 2 * PI);
 
