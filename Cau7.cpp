@@ -415,7 +415,7 @@ int main()
                 string ma_chuyen_bay;
                 cout << "Nhap ma chuyen bay can tim: ";
                 cin >> ma_chuyen_bay;
-                    tim_kiem_theo_ma(ma_chuyen_bay);
+                tim_kiem_theo_ma(ma_chuyen_bay);
                 break;
             }
             case 2:
@@ -444,7 +444,7 @@ int main()
             case 5:
             {
                 string noi_di, ngay;
-
+                cin.ignore();
                 cout << "Nhap noi di: ";
                 while (true)
                 {
@@ -466,6 +466,7 @@ int main()
             case 6:
             {
                 string noi_di, noi_den;
+                cin.ignore();
                 cout << "Nhap noi di: ";
                 while (true)
                 {
