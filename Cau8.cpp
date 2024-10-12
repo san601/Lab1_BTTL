@@ -21,6 +21,7 @@ struct SoTietKiem
      *
      * Attributes:
      *      ma_so (string): ma so cua so tiet kiem
+     *      ky_han (int): so thang cua 1 ky han
      *      loai_tiet_kiem (string): loai tiet kiem
      *      ho_ten_khach_hang (string): ho ten khach hang
      *      cmnd (string): so CMND cua khach hang
