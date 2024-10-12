@@ -5,8 +5,6 @@
 
 using namespace std;
 
-int N = 1e5 + 5;
-
 int main() {
     vector <int> ket_qua, a, b;
     int n;
@@ -30,6 +28,7 @@ int main() {
         b.push_back(temp);
     }
 
+    // Tim mang a trong mang b
     auto i = b.begin();
     while (i != b.end())
     {
@@ -37,7 +36,7 @@ int main() {
         if (temp != b.end())
         {
             ket_qua.push_back(abs(distance(temp, b.begin())));
-            i = temp + n;
+            i = temp + 1;
         }
         else i++;
     }
