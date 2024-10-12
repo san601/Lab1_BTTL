@@ -21,7 +21,7 @@ double gia_tri(int &tu_so, int &mau_so)
     int temp = __gcd(tu_so, mau_so);
     tu_so = tu_so / temp;
     mau_so = mau_so / temp;
-
+    if (mau_so < 0) tu_so *= -1, mau_so *= -1;
     return 1.0 * tu_so / mau_so;
 }
 
@@ -48,9 +48,13 @@ int main() {
 
     // So sanh gia tri cua hai phan so
     if (gia_tri(tu_so_1, mau_so_1) > gia_tri(tu_so_2, mau_so_2))
-        printf("Phan so lon nhat la %d/%d", tu_so_1, mau_so_1);
+        if (tu_so_1 == 0) printf("Phan so lon nhat la 0");
+        else if (mau_so_1 == 1) printf("Phan so lon nhat la %d", tu_so_1);
+        else printf("Phan so lon nhat la %d/%d", tu_so_1, mau_so_1);
     else if (gia_tri(tu_so_1, mau_so_1) < gia_tri(tu_so_2, mau_so_2))
-        printf("Phan so lon nhat la %d/%d", tu_so_2, mau_so_2);
+        if (tu_so_2 == 0) printf("Phan so lon nhat la 0");
+        else if (mau_so_2 == 1) printf("Phan so lon nhat la %d", tu_so_2);
+        else printf("Phan so lon nhat la %d/%d", tu_so_2, mau_so_2);
     else puts("Hai phan so bang nhau");
 
     return 0;
