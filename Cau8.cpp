@@ -1,11 +1,13 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 
-float lai_suat_1_nam = 0.046;
-float lai_suat_6_thang = 0.03;
+//float lai_suat_dai_han = 0.046;
+//float lai_suat_ngan_han = 0.03;
+float lai_suat_khong_ky_han = 0.005;
 
 int ENCODED_DATE[2][14] = {
         {0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365},
@@ -26,7 +28,8 @@ struct SoTietKiem
      */
 
     string ma_so;               // max 5 ky tu
-    string loai_tiet_kiem;      // max 10 ky tu
+    int ky_han;                 // so thang
+    string loai_tiet_kiem;
     string ho_ten_khach_hang;   // max 30 ky tu
     string cmnd;                // 9 hoac 12 ky tu
     string ngay_mo_so;          // dd/mm/yyyy
@@ -154,9 +157,12 @@ void input()
             cout << "Ma so khong hop le. Vui long nhap lai:\n";
         }
 
-        cout << "Nhap loai tiet kiem: ";
         cin.ignore();
+        cout << "Nhap loai tiet kiem: ";
         getline(cin, so.loai_tiet_kiem);
+        if (so.loai_tiet_kiem == "Dai han") so.ky_han = 12;
+        else if (so.loai_tiet_kiem == "Ngan han") so.ky_han = 3;
+        else so.ky_han = 0;
 
         cout << "Nhap ho ten khach hang: ";
         getline(cin, so.ho_ten_khach_hang);
@@ -193,7 +199,7 @@ void output(struct SoTietKiem so)
 
     cout << endl;
     printf("Ma so: %s\n", so.ma_so.c_str());
-    printf("Loai tiet kiem: %s\n", so.loai_tiet_kiem.c_str());
+    printf("Ky han: %d thang\n", so.ky_han);
     printf("Ho ten khach hang: %s\n", so.ho_ten_khach_hang.c_str());
     printf("So CMND: %s\n", so.cmnd.c_str());
     printf("Ngay mo so: %s\n", so.ngay_mo_so.c_str());
@@ -257,7 +263,7 @@ int khoang_cach_giua_2_ngay(string date_1, string date_2)
     return so_ngay_2 - so_ngay_1;
 }
 
-void tinh_lai(string ma_so)
+float tinh_lai(string ma_so, float lai_suat_dai_han, float lai_suat_ngan_han)
 {
     /*
      * Tinh lai suat dua tren ngay mo so va ngay hien tai
@@ -273,14 +279,52 @@ void tinh_lai(string ma_so)
         if (so.ma_so == ma_so)
         {
             int so_ngay = khoang_cach_giua_2_ngay(so.ngay_mo_so, ngay_hien_tai);
-            if (so_ngay >= 365)
-                lai = so.so_tien_gui * lai_suat_1_nam * so_ngay / 365;
-            else if (so_ngay >= 180)
-                lai = so.so_tien_gui * lai_suat_6_thang * so_ngay / 180;
+            // Tinh theo cong thuc lai binh thuong + lai khong ky han
+            if (so_ngay < so.ky_han * 30 || so.ky_han == 0) // Lai khong ky han
+                lai = so.so_tien_gui * lai_suat_khong_ky_han * so_ngay / 365;
+            else
+            {
+                if (so.ky_han < 6) // Ngan han
+                {
+                    lai = so.so_tien_gui * lai_suat_ngan_han * so.ky_han * 30 / 365 * floor(so_ngay / (so.ky_han * 30));
+                    lai += so.so_tien_gui * lai_suat_khong_ky_han * (so_ngay % (so.ky_han * 30)) / 365;
+                } else // Dai han
+                {
+                    lai = so.so_tien_gui * lai_suat_dai_han * so.ky_han * 30 / 365 * floor(so_ngay / (so.ky_han * 30));
+                    lai += so.so_tien_gui * lai_suat_khong_ky_han * (so_ngay % (so.ky_han * 30)) / 365;
+                }
+            }
         }
     }
-    cout << "So tien lai: " << lai << " dong" << endl;
+    return lai;
 }
+
+void cap_nhat_lai_suat(string ma_so)
+{
+    /*
+     * Cap nhat lai suat cho so tiet kiem
+     *
+     * Args:
+     *      ma_so (string): ma so cua so tiet kiem can cap nhat
+     */
+
+    float lai_suat_dai_han, lai_suat_ngan_han;
+    cout << "Nhap lai suat dai han (%/nam): ";
+    cin >> lai_suat_dai_han;
+    lai_suat_dai_han /= 100;
+    cout << "Nhap lai suat ngan han (%/nam): ";
+    cin >> lai_suat_ngan_han;
+    lai_suat_ngan_han /= 100;
+
+    for (auto& so : so_tiet_kiem)
+    {
+        if (so.ma_so == ma_so)
+        {
+            cout << "Tien lai cua ban la : " << tinh_lai(ma_so, lai_suat_dai_han, lai_suat_ngan_han) << endl;
+        }
+    }
+}
+
 
 void tim_kiem(string str)
 {
@@ -316,6 +360,16 @@ void tim_kiem(string str)
 
 bool ngay_nho_hon(string ngay_a, string ngay_b)
 {
+    /*
+     * So sanh 2 ngay
+     *
+     * Args:
+     *      ngay_a (string): ngay a
+     *      ngay_b (string): ngay b
+     *
+     * Return:
+     *      bool: true neu ngay a nho hon ngay b, false neu nguoc lai
+     */
     int ngay = stoi(ngay_a.substr(0, 2));
     int thang = stoi(ngay_a.substr(3, 2));
     int nam = stoi(ngay_a.substr(6, 4));
@@ -367,33 +421,144 @@ void sort_ngay_mo_tang_dan()
     });
 }
 
+void rut_tien()
+{
+    /*
+     * Rut tien tu so tiet kiem
+     */
+
+    string ma_so;
+    cout << "Nhap ma so can rut tien: ";
+    cin >> ma_so;
+    string cmnd;
+    cout << "Nhap so CMND cua so: ";
+    cin >> cmnd;
+
+    for (auto& so:so_tiet_kiem)
+    {
+        if (so.ma_so == ma_so && so.cmnd == cmnd)
+        {
+            // Kiem tra rut dung ky han
+            if (so.ky_han != 0)
+            {
+                if (khoang_cach_giua_2_ngay(so.ngay_mo_so, "09/10/2024") < so.ky_han * 30)
+                {
+                    cout << "Lai suat thap hon neu ban rut truoc ky han" << endl;
+                    cout << "So du trong tai khoan la: " << so.so_tien_gui + tinh_lai(ma_so, 0.046, 0.03) << " dong" << endl;
+                }
+            }
+            float so_tien_rut;
+            cout << "Nhap so tien can rut: ";
+            cin >> so_tien_rut;
+            if (so_tien_rut <= so.so_tien_gui + tinh_lai(ma_so, 0.046, 0.03))
+            {
+                so.so_tien_gui = so.so_tien_gui + tinh_lai(ma_so, 0.046, 0.03) - so_tien_rut;
+                cout << "Rut tien thanh cong" << endl;
+            }
+            else cout << "So tien khong du" << endl;
+        }
+    }
+}
+
 int main()
 {
     input();
-    for (const auto& so : so_tiet_kiem)
-    {
-        output(so);
-    }
     string str;
-    cout << "Nhap ma so/cmnd cua so can tim: ";
-    cin >> str;
-    tim_kiem(str);
-    string ngay_bat_dau, ngay_ket_thuc;
-    cout << "Nhap ngay bat dau va ngay ket thuc: ";
-    cin >> ngay_bat_dau >> ngay_ket_thuc;
-    cout << "Danh sach so tiet kiem trong khoang thoi gian tren: " << endl;
-    liet_ke(ngay_bat_dau, ngay_ket_thuc);
-    cout << "Sap xep so tiet kiem theo so tien gui giam dan: " << endl;
-    sort_tien_giam_dan();
-    for (const auto& so : so_tiet_kiem)
+    while (true)
     {
-        output(so);
+        // Tao menu cho nguoi dung chon chuc nang
+        cout << "1. Xuat du lieu so tiet kiem\n";
+        cout << "2. Chuc nang nang cao\n";
+        cout << "3. Tim kiem va liet ke\n";
+        cout << "4. Sap xep danh sach so tiet kiem\n";
+        cout << "5. Thoat chuong trinh\n";
+        cout << "Chon chuc nang: ";
+        int chuc_nang;
+        cin >> chuc_nang;
+        switch (chuc_nang) {
+            case 1:
+            {
+                for (const auto &so: so_tiet_kiem)
+                {
+                    output(so);
+                }
+                break;
+            }
+            case 2:
+            {
+                int opt;
+                cout << "1. Cap nhat lai suat\n";
+                cout << "2. Tinh toan tien lai\n";
+                cout << "3. Rut tien\n";
+                cin >> opt;
+                switch (opt)
+                {
+                    case 1:
+                    {
+                        cout << "Nhap ma so can cap nhat lai suat: ";
+                        cin >> str;
+                        cap_nhat_lai_suat(str);
+                        break;
+                    }
+                    case 2:
+                    {
+                        cout << "Nhap ma so can tinh lai: ";
+                        cin >> str;
+                        cout << "Tien lai cua ban la : " << tinh_lai(str, 0.046, 0.03) << endl;
+                        break;
+                    }
+                    case 3:
+                    {
+                        rut_tien();
+                        break;
+                    }
+                }
+                break;
+            }
+            case 3:
+            {
+                string ngay_bat_dau, ngay_ket_thuc;
+                cout << "Nhap ma so hoac CMND can tim: ";
+                cin >> str;
+                tim_kiem(str);
+                cout << "Nhap ngay bat dau va ngay ket thuc: ";
+                cin >> ngay_bat_dau >> ngay_ket_thuc;
+                liet_ke(ngay_bat_dau, ngay_ket_thuc);
+                break;
+            }
+            case 4:
+            {
+                cout << "1. Sap xep so tiet kiem theo so tien gui giam dan\n";
+                cout << "2. Sap xep so tiet kiem theo ngay mo so tang dan\n";
+                cout << "3. Tro ve menu chinh\n";
+                cout << "Chon cach sap xep: ";
+
+                int cach_sap_xep;
+                cin >> cach_sap_xep;
+                switch (cach_sap_xep) {
+                    case 1:
+                    {
+                        sort_tien_giam_dan();
+                        for (const auto &so: so_tiet_kiem) {
+                            output(so);
+                        }
+                    }
+                        break;
+                    case 2:
+                    {
+                        sort_ngay_mo_tang_dan();
+                        for (const auto &so: so_tiet_kiem) {
+                            output(so);
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                break;
+            }
+            default:
+                return 0;
+        }
     }
-    cout << "Sap xep so tiet kiem theo ngay mo so tang dan: " << endl;
-    sort_ngay_mo_tang_dan();
-    for (const auto& so : so_tiet_kiem)
-    {
-        output(so);
-    }
-    return 0;
 }
