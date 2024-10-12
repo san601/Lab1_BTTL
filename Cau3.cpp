@@ -17,7 +17,9 @@ void output(int tu_so, int mau_so)
     tu_so /= gcd;
     mau_so /= gcd;
     if (mau_so < 0) tu_so *= -1, mau_so *= -1;
-    printf("%d/%d\n", tu_so, mau_so);
+    if (tu_so == 0) printf("0\n");
+    else if (mau_so == 1) printf("%d\n", tu_so);
+    else printf("%d/%d\n", tu_so, mau_so);
 }
 
 void tong(int tu_so_1, int mau_so_1, int tu_so_2, int mau_so_2)
