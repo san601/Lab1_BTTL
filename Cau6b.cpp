@@ -162,6 +162,7 @@ void dtb_cao_nhat()
     {
         if (i.diem_trung_binh > tmp.diem_trung_binh) tmp = i;
     }
+    cout << "Danh sach hoc sinh co diem trung binh cao nhat la:\n";
     for (auto i : hoc_sinh)
     {
         if (i.diem_trung_binh == tmp.diem_trung_binh)
