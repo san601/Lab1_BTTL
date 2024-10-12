@@ -14,6 +14,17 @@ int ENCODED_DATE[2][14] = {
 
 struct SoTietKiem
 {
+    /*
+     * Struct luu tru thong tin cua so tiet kiem
+     *
+     * Attributes:
+     *      ma_so (string): ma so cua so tiet kiem
+     *      loai_tiet_kiem (string): loai tiet kiem
+     *      ho_ten_khach_hang (string): ho ten khach hang
+     *      cmnd (string): so CMND cua khach hang
+     *      ngay_mo_so (string): ngay mo so
+     */
+
     string ma_so;               // max 5 ky tu
     string loai_tiet_kiem;      // max 10 ky tu
     string ho_ten_khach_hang;   // max 30 ky tu
@@ -26,11 +37,31 @@ vector <struct SoTietKiem> so_tiet_kiem;
 
 bool nam_nhuan(int nam)
 {
+    /*
+     * Ham kiem tra nam co phai la nam nhuan hay khong
+     *
+     * Args:
+     *      nam (int): nam can kiem tra
+     *
+     * Returns:
+     *      bool: true neu la nam nhuan, false neu khong phai
+     */
+
     return (nam % 4 == 0 && nam % 100 != 0) || (nam % 400 == 0);
 }
 
 bool ngay_mo_so_hop_le(string ngay_mo_so)
 {
+    /*
+     * Ham kiem tra ngay mo so co hop le hay khong
+     *
+     * Args:
+     *      ngay_mo_so (string): ngay mo so can kiem tra
+     *
+     * Returns:
+     *      bool: true neu hop le, false neu khong hop le
+     */
+
     if (ngay_mo_so.length() != 10) return false;
     if (ngay_mo_so[2] != '/' || ngay_mo_so[5] != '/') return false;
     if (!isdigit(ngay_mo_so[0]) || !isdigit(ngay_mo_so[1]) || !isdigit(ngay_mo_so[3]) || !isdigit(ngay_mo_so[4]) || !isdigit(ngay_mo_so[6]) || !isdigit(ngay_mo_so[7]) || !isdigit(ngay_mo_so[8]) || !isdigit(ngay_mo_so[9])) return false;
@@ -59,7 +90,13 @@ bool ngay_mo_so_hop_le(string ngay_mo_so)
 
 bool ma_so_hop_le(string ma_so)
 {
-    // kiem tra do dai hop le, khong chua ky tu dac biet va khoang trang
+    /*
+     * Kiem tra do dai hop le, khong chua ky tu dac biet va khoang trang
+     *
+     * Args:
+     *      ma_so (string): ma so can kiem tra
+     */
+
     if (ma_so.length() <= 5)
     {
         for (char c : ma_so)
@@ -76,16 +113,34 @@ bool ma_so_hop_le(string ma_so)
 
 bool cmnd_hop_le(string cmnd)
 {
+    /*
+     * Kiem tra so CMND hop le
+     *
+     * Args:
+     *      cmnd (string): so CMND can kiem tra
+     */
+
     return (cmnd.length() == 9 || cmnd.length() == 12);
 }
 
 bool so_tien_gui_hop_le(float so_tien_gui)
 {
+    /*
+     * Kiem tra so tien gui hop le
+     *
+     * Args:
+     *      so_tien_gui (float): so tien gui ban dau
+     */
+
     return (so_tien_gui > 0);
 }
 
 void input()
 {
+    /*
+     * Nhap thong tin so tiet kiem
+     */
+
     cout << "Nhap so luong so: ";
     int n; cin >> n;
 
@@ -132,7 +187,10 @@ void input()
 
 void output(struct SoTietKiem so)
 {
-    // output
+    /*
+     * In thong tin cua so tiet kiem
+     */
+
     cout << endl;
     printf("Ma so: %s\n", so.ma_so.c_str());
     printf("Loai tiet kiem: %s\n", so.loai_tiet_kiem.c_str());
@@ -145,6 +203,14 @@ void output(struct SoTietKiem so)
 
 int khoang_cach_giua_2_ngay(string date_1, string date_2)
 {
+    /*
+     * Tinh so ngay giua 2 ngay
+     *
+     * Args:
+     *      date_1 (string): ngay 1
+     *      date_2 (string): ngay 2
+     */
+
     int ngay_1 = stoi(date_1.substr(0, 2));
     int thang_1 = stoi(date_1.substr(3, 2));
     int nam_1 = stoi(date_1.substr(6, 4));
@@ -193,6 +259,13 @@ int khoang_cach_giua_2_ngay(string date_1, string date_2)
 
 void tinh_lai(string ma_so)
 {
+    /*
+     * Tinh lai suat dua tren ngay mo so va ngay hien tai
+     *
+     * Args:
+     *      ma_so (string): ma so cua so tiet kiem can tinh
+     */
+
     string ngay_hien_tai = "09/10/2024";
     float lai = 0;
     for (auto& so : so_tiet_kiem)
@@ -211,6 +284,13 @@ void tinh_lai(string ma_so)
 
 void tim_kiem(string str)
 {
+    /*
+     * Tim kiem so tiet kiem theo ma so hoac CMND
+     *
+     * Args:
+     *      str (string): ma so hoac CMND can tim
+     */
+
     if (str.length() <= 5)
     {
         for (auto so:so_tiet_kiem)
@@ -249,6 +329,13 @@ bool ngay_nho_hon(string ngay_a, string ngay_b)
 
 void liet_ke(string ngay_bat_dau, string ngay_ket_thuc)
 {
+    /*
+     * Liet ke danh sach so tiet kiem trong khoang thoi gian tu ngay_bat_dau den ngay_ket_thuc
+     *
+     * Args:
+     *      ngay_bat_dau (string): ngay bat dau
+     *      ngay_ket_thuc (string): ngay ket thuc
+     */
     for (auto so:so_tiet_kiem)
     {
         if (ngay_nho_hon(so.ngay_mo_so, ngay_ket_thuc) && ngay_nho_hon(ngay_bat_dau, so.ngay_mo_so))
@@ -263,6 +350,7 @@ void sort_tien_giam_dan()
     /*
      * Sap xep so tiet kiem theo so tien gui giam dan
      */
+
     sort(so_tiet_kiem.begin(), so_tiet_kiem.end(), [](const SoTietKiem& a, const SoTietKiem& b) {
         return a.so_tien_gui > b.so_tien_gui;
     });
@@ -273,6 +361,7 @@ void sort_ngay_mo_tang_dan()
     /*
      * Sap xep so tiet kiem theo ngay mo so tang dan
      */
+
     sort(so_tiet_kiem.begin(), so_tiet_kiem.end(), [](const SoTietKiem& a, const SoTietKiem& b) {
         return ngay_nho_hon(a.ngay_mo_so, b.ngay_mo_so);
     });

@@ -5,15 +5,33 @@ using namespace std;
 
 void output(int tu_so, int mau_so)
 {
+    /*
+     * Ham xuat phan so sau khi rut gon
+     *
+     * Args:
+     *      tu_so (int): tu so cua phan so
+     *      mau_so (int): mau so cua phan so
+     */
+
     int gcd = __gcd(tu_so, mau_so);
     tu_so /= gcd;
     mau_so /= gcd;
-    if (mau_so < 0) tu_so *= -1;
+    if (mau_so < 0) tu_so *= -1, mau_so *= -1;
     printf("%d/%d\n", tu_so, mau_so);
 }
 
 void tong(int tu_so_1, int mau_so_1, int tu_so_2, int mau_so_2)
 {
+    /*
+     * Ham tinh tong hai phan so
+     *
+     * Args:
+     *      tu_so_1 (int): tu so cua phan so 1
+     *      mau_so_1 (int): mau so cua phan so 1
+     *      tu_so_2 (int): tu so cua phan so 2
+     *      mau_so_2 (int): mau so cua phan so 2
+     */
+
     int tu_so = (tu_so_1 * mau_so_2) + (tu_so_2 * mau_so_1);
     int mau_so = mau_so_1 * mau_so_2;
     printf("Tong la ");
@@ -22,6 +40,16 @@ void tong(int tu_so_1, int mau_so_1, int tu_so_2, int mau_so_2)
 
 void hieu(int tu_so_1, int mau_so_1, int tu_so_2, int mau_so_2)
 {
+    /*
+     * Ham tinh hieu hai phan so
+     *
+     * Args:
+     *      tu_so_1 (int): tu so cua phan so 1
+     *      mau_so_1 (int): mau so cua phan so 1
+     *      tu_so_2 (int): tu so cua phan so 2
+     *      mau_so_2 (int): mau so cua phan so 2
+     */
+
     int tu_so = (tu_so_1 * mau_so_2) - (tu_so_2 * mau_so_1);
     int mau_so = mau_so_1 * mau_so_2;
     printf("Hieu la ");
@@ -30,6 +58,16 @@ void hieu(int tu_so_1, int mau_so_1, int tu_so_2, int mau_so_2)
 
 void tich(int tu_so_1, int mau_so_1, int tu_so_2, int mau_so_2)
 {
+    /*
+     * Ham tinh tich hai phan so
+     *
+     * Args:
+     *      tu_so_1 (int): tu so cua phan so 1
+     *      mau_so_1 (int): mau so cua phan so 1
+     *      tu_so_2 (int): tu so cua phan so 2
+     *      mau_so_2 (int): mau so cua phan so 2
+     */
+
     int tu_so = tu_so_1 * tu_so_2;
     int mau_so = mau_so_1 * mau_so_2;
     printf("Tich la ");
@@ -38,6 +76,16 @@ void tich(int tu_so_1, int mau_so_1, int tu_so_2, int mau_so_2)
 
 void thuong(int tu_so_1, int mau_so_1, int tu_so_2, int mau_so_2)
 {
+    /*
+     * Ham tinh phep chia hai phan so
+     *
+     * Args:
+     *      tu_so_1 (int): tu so cua phan so 1
+     *      mau_so_1 (int): mau so cua phan so 1
+     *      tu_so_2 (int): tu so cua phan so 2
+     *      mau_so_2 (int): mau so cua phan so 2
+     */
+
     int tu_so = tu_so_1 * mau_so_2;
     int mau_so = mau_so_1 * tu_so_2;
     printf("Thuong la ");

@@ -12,11 +12,29 @@ int ENCODED_DATE[2][14] = {
 
 bool nam_nhuan(int nam)
 {
+    /*
+     * Ham kiem tra nam co phai la nam nhuan hay khong
+     *
+     * Args:
+     *      nam (int): nam can kiem tra
+     *
+     * Returns:
+     *      bool: true neu la nam nhuan, false neu khong phai
+     */
+
     return (nam % 4 == 0 && nam % 100 != 0) || (nam % 400 == 0);
 }
 
 void decode(int ngay, int nam)
 {
+    /*
+     * Ham chuyen doi ngay encoded sang ngay thang nam
+     *
+     * Args:
+     *      ngay (int): ngay encoded
+     *      nam (int): nam cua ngay
+     */
+
     int n = 1;
     while (ngay - ENCODED_DATE[nam_nhuan(nam)][n] > 0)
     {
@@ -27,15 +45,30 @@ void decode(int ngay, int nam)
 
 bool hop_le(string ngay_thang_nam)
 {
+    /*
+     * Ham kiem tra ngay thang nam co hop le hay khong
+     *
+     * Args:
+     *      ngay_thang_nam (string): ngay thang nam can kiem tra
+     *
+     * Returns:
+     *      bool: true neu hop le, false neu khong hop le
+     */
+
+    // Kiem tra dung dinh dang dd/mm/yyyy
     if (ngay_thang_nam.length() != 10) return false;
     if (ngay_thang_nam[2] != '/' || ngay_thang_nam[5] != '/') return false;
     if (!isdigit(ngay_thang_nam[0]) || !isdigit(ngay_thang_nam[1]) || !isdigit(ngay_thang_nam[3]) || !isdigit(ngay_thang_nam[4]) || !isdigit(ngay_thang_nam[6]) || !isdigit(ngay_thang_nam[7]) || !isdigit(ngay_thang_nam[8]) || !isdigit(ngay_thang_nam[9])) return false;
+
+    // Lay ngay, thang, nam tu ngay bay
     int ngay = stoi(ngay_thang_nam.substr(0, 2));
     int thang = stoi(ngay_thang_nam.substr(3, 2));
     int nam = stoi(ngay_thang_nam.substr(6, 4));
 
+    // Kiem tra nam hop le
     if (nam < 0) return false;
 
+    // Kiem tra ngay thang hop le
     switch (thang)
     {
         case 1: case 3: case 5: case 7: case 8: case 10: case 12:

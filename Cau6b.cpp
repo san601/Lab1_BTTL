@@ -18,6 +18,16 @@ struct HocSinh
 vector <struct HocSinh> hoc_sinh;
 
 bool ten_hop_le(string ten) {
+    /*
+     * Kiem tra ten hoc sinh hop le
+     *
+     * Args:
+     *      ten (string): ten hoc sinh can kiem tra
+     *
+     * Returns:
+     *      bool: true neu hop le, false neu khong hop le
+     */
+
     // kiem tra do dai ten
     if (ten.length() < 1 || ten.length() > 50) {
         return false;
@@ -47,13 +57,34 @@ bool ten_hop_le(string ten) {
 
 float diem_trung_binh(float diem_toan, float diem_van, float diem_nn)
 {
+    /*
+     * Tinh diem trung binh cua hoc sinh
+     *
+     * Args:
+     *      diem_toan (float): diem mon toan
+     *      diem_van (float): diem mon van
+     *      diem_nn (float): diem mon ngoai ngu
+     *
+     * Returns:
+     *      float: diem trung binh
+     */
+
     // diem trung binh = (2 * diem toan + diem van + diem ngoai ngu) / 4
     return (2 * diem_toan + diem_van + diem_nn) / 4;
 }
 
 string xep_hang(float dtb)
 {
-    // xep hang hoc sinh
+    /*
+     * Xep hang hoc sinh
+     *
+     * Args:
+     *      dtb (float): diem trung binh cua hoc sinh
+     *
+     * Returns:
+     *      string: xep hang hoc sinh
+     */
+
     if (dtb >= 9) return "Xuat sac";
     if (dtb >= 8) return "Gioi";
     if (dtb >= 6.5) return "Kha";
@@ -63,13 +94,20 @@ string xep_hang(float dtb)
 
 void input(int n)
 {
-    // nhap thong tin hoc sinh
+    /*
+     * Nhap thong tin hoc sinh
+     *
+     * Args:
+     *      n (int): so luong hoc sinh
+     */
+
     for (int i = 0; i < n; i++)
     {
         string ten;
         float diem_toan, diem_van, diem_nn;
         struct HocSinh tmp;
 
+        // Nhap va kiem tra hop le ten hoc sinh
         cout << "Nhap ten hoc sinh: ";
         while(true)
         {
@@ -80,6 +118,8 @@ void input(int n)
             }
             else break;
         }
+
+        // Nhap va kiem tra diem toan, van, ngoai ngu hop le
         while (true)
         {
             cout << "Nhap diem toan (trong khoang tu 0 den 10): ";
@@ -98,6 +138,8 @@ void input(int n)
             cin >> diem_nn;
             if (diem_nn >= 0 && diem_nn <= 10) break;
         }
+
+        // Luu thong tin hoc sinh
         tmp.ho_ten = ten;
         tmp.diem_toan = diem_toan;
         tmp.diem_van = diem_van;
@@ -111,6 +153,10 @@ void input(int n)
 
 void dtb_cao_nhat()
 {
+    /*
+     * Tim hoc sinh co diem trung binh cao nhat
+     */
+
     struct HocSinh tmp;
     for (auto i : hoc_sinh)
     {
@@ -121,6 +167,13 @@ void dtb_cao_nhat()
 
 void diem_toan_thap_nhat()
 {
+    /*
+     * Tim hoc sinh co diem toan thap nhat
+     *
+     * Args:
+     *      ten (string): ten hoc sinh can tim kiem
+     */
+
     struct HocSinh tmp;
     tmp.diem_toan = 11;
     cout << "Danh sach hoc sinh co diem toan thap nhat la:\n";
@@ -138,10 +191,14 @@ void diem_toan_thap_nhat()
 
 void tim_kiem_hoc_sinh(string ten)
 {
-    // undercase the input and the names in the list
+    /*
+     * Tim kiem hoc sinh theo ten
+     *
+     * Args:
+     *      ten (string): ten hoc sinh can tim kiem
+     */
     transform(ten.begin(), ten.end(), ten.begin(), ::tolower);
 
-    // search for ten in the list (not full matching)
     for (auto i : hoc_sinh)
     {
         string tmp = i.ho_ten;
