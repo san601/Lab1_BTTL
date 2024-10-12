@@ -162,7 +162,11 @@ void dtb_cao_nhat()
     {
         if (i.diem_trung_binh > tmp.diem_trung_binh) tmp = i;
     }
-    cout << "Hoc sinh co diem trung binh cao nhat la: " << tmp.ho_ten << " voi diem trung binh la " << tmp.diem_trung_binh << " va xep loai " << tmp.xep_hang << endl;
+    for (auto i : hoc_sinh)
+    {
+        if (i.diem_trung_binh == tmp.diem_trung_binh)
+            cout << "  -   " << i.ho_ten << " voi diem trung binh la " << i.diem_trung_binh << " va xep loai " << i.xep_hang << endl;
+    }
 }
 
 void diem_toan_thap_nhat()
