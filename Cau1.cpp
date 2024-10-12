@@ -17,7 +17,7 @@ int main() {
     tu_so /= gcd;
     mau_so /= gcd;
     // Neu mau so am thi dua dau am len tu so
-    if (mau_so < 0) tu_so *= -1;
+    if (mau_so < 0) tu_so *= -1, mau_so *= -1;
     cout << "Phan so duoc rut gon la: " << tu_so << "/" << mau_so;
     return 0;
 }
