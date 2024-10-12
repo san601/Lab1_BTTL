@@ -40,6 +40,7 @@ int main() {
         }
         else i++;
     }
+    cout << "So lan xuat hien cua mang A trong B: " << ket_qua.size() << endl;
     cout << "Mang A xuat hien o cac vi tri: ";
     for (auto i : ket_qua) cout << i << " ";
     return 0;
